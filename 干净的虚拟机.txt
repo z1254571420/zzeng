@@ -1,0 +1,27 @@
+curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && yum clean all && yum makecache
+
+systemctl stop NetworkManager
+systemctl disable NetworkManager
+
+yum -y install vim bash-completion unzip wget   epel-release
+
+systemctl stop firewalld
+systemctl disable firewalld    关闭防火墙
+setenforce 0         关闭Selinux
+vim /etc/selinux/config
+SELINUX=disabled
+
+cd /etc/sysconfig/network-scripts/
+cp ifcfg-ens33 ifcfg-ens33.bak
+vim ifcfg-ens33
+TYPE="Ethernet"
+BOOTPROTO="none"
+DEVICE="ens33"
+ONBOOT="yes"
+IPADDR=192.168.100.131
+GATEWAY=192.168.100.2
+PREFIX=24
+DNS1=114.114.114.114
+
+
+systemctl restart network
